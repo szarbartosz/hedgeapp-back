@@ -65,7 +65,6 @@ func Login(c *gin.Context) {
 	}
 
 	var user models.User
-
 	result := initializers.DB.First(&user, "email = ?", body.Email)
 
 	if result.Error != nil {
@@ -98,7 +97,18 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("Authorization", tokenString, 60*60*24*30, "/", "", false, true)
+
 	c.JSON(http.StatusOK, gin.H{
 		"token": tokenString,
+	})
+}
+
+func Validate(c *gin.Context) {
+	user, _ := c.Get("user")
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Hello " + user.(models.User).Email + "!",
 	})
 }
