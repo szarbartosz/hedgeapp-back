@@ -13,15 +13,6 @@ POST /register
 }
 ```
 
-#### response
-
-```js
-{
-  message: string;
-  error: string;
-}
-```
-
 ### login
 
 ```http
@@ -35,26 +26,8 @@ POST /login
 }
 ```
 
-#### response
-
-```js
-{
-  token: string;
-  error: string;
-}
-```
-
 ### delete user
 
 ```http
 DELETE /delete/user
-```
-
-#### response
-
-```js
-{
-  message: string;
-  error: string;
-}
 ```
