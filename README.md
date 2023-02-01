@@ -5,14 +5,15 @@
 ### auth
 
 ```http
-request: POST /register
-body:
-{
+POST /register
+```
+
+```js
+body: {
   email: string,
   password: string
 }
-response:
-{
+response: {
   message: string
   error: string
 }
