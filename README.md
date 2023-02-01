@@ -1,8 +1,6 @@
 # hedgeapp backend :hedgehog:
 
-## auth
-
-### request
+### register
 
 ```http
 POST /register
@@ -20,6 +18,28 @@ POST /register
 ```js
 {
   message: string;
+  error: string;
+}
+```
+
+### login
+
+```http
+POST /login
+```
+
+```js
+{
+  email: string,
+  password: string
+}
+```
+
+### response
+
+```js
+{
+  token: string;
   error: string;
 }
 ```

@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UserAlreadyExists(c *gin.Context, body models.RegisterBody) bool {
+func UserAlreadyExists(c *gin.Context, body models.AuthBody) bool {
 	var user models.User
 	result := initializers.DB.First(&user, "email = ?", body.Email)
 
