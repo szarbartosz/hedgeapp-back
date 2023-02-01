@@ -43,3 +43,18 @@ POST /login
   error: string;
 }
 ```
+
+### delete user
+
+```http
+DELETE /delete/user
+```
+
+#### response
+
+```js
+{
+  message: string;
+  error: string;
+}
+```

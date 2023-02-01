@@ -105,10 +105,27 @@ func Login(c *gin.Context) {
 	})
 }
 
+func Delete(c *gin.Context) {
+	user, _ := c.Get("user")
+
+	result := initializers.DB.Delete(&user, "id = ?", user.(models.User).ID)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to delete user",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "User deleted successfully",
+	})
+}
+
 func Validate(c *gin.Context) {
 	user, _ := c.Get("user")
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Hello " + user.(models.User).Email + "!",
+		"user": user,
 	})
 }
