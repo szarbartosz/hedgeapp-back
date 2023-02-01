@@ -1,20 +1,25 @@
 # hedgeapp backend :hedgehog:
 
-## REST api
+## auth
 
-### auth
+### request
 
 ```http
 POST /register
 ```
 
 ```js
-body: {
+{
   email: string,
   password: string
 }
-response: {
-  message: string
-  error: string
+```
+
+### response
+
+```js
+{
+  message: string;
+  error: string;
 }
 ```
