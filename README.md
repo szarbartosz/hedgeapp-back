@@ -124,7 +124,7 @@ GET /locations
 GET /locations/:id
 ```
 
-### delete locations
+### delete location
 
 ```http
 DELETE /locations/:id
