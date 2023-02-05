@@ -20,9 +20,11 @@ func main() {
 	r.POST("/register", controllers.Register)
 	r.POST("/login", controllers.Login)
 	r.POST("/status", middleware.RequireAuth, controllers.CreateStatus)
+	r.POST("/developer", middleware.RequireAuth, controllers.CreateDeveloper)
 
 	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
 	r.GET("/status", middleware.RequireAuth, controllers.GetStatuses)
+	r.GET("/developer", middleware.RequireAuth, controllers.GetDevelopers)
 
 	r.DELETE("/user", middleware.RequireAuth, controllers.DeleteUser)
 
