@@ -14,7 +14,7 @@ import (
 )
 
 func Register(c *gin.Context) {
-	var body models.AuthBody
+	var body models.Credentials
 
 	if c.BindJSON(&body) != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -55,7 +55,7 @@ func Register(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	var body models.AuthBody
+	var body models.Credentials
 
 	if c.BindJSON(&body) != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -105,7 +105,7 @@ func Login(c *gin.Context) {
 	})
 }
 
-func Delete(c *gin.Context) {
+func DeleteUser(c *gin.Context) {
 	user, _ := c.Get("user")
 
 	result := initializers.DB.Delete(&user, "id = ?", user.(models.User).ID)
