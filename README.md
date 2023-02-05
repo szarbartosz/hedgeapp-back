@@ -31,7 +31,7 @@ POST /login
 ### delete user
 
 ```http
-DELETE /delete/user
+DELETE /delete/users
 ```
 
 ## Status
@@ -39,7 +39,7 @@ DELETE /delete/user
 ### create status
 
 ```http
-POST /status
+POST /statuses
 ```
 
 ```js
@@ -51,7 +51,7 @@ POST /status
 ### get statuses
 
 ```http
-GET /status
+GET /statuses
 ```
 
 ## Developer
@@ -59,7 +59,7 @@ GET /status
 ### create developer
 
 ```http
-POST /developer
+POST /developers
 ```
 
 ```js
@@ -71,7 +71,7 @@ POST /developer
 ### get developers
 
 ```http
-GET /developer
+GET /developers
 ```
 
 ## Locations
@@ -79,7 +79,7 @@ GET /developer
 ### create location
 
 ```http
-POST /location
+POST /locations
 ```
 
 ```js
@@ -97,5 +97,17 @@ POST /location
 ### get locations
 
 ```http
-GET /locaiton
+GET /locations
+```
+
+### get single locations
+
+```http
+GET /locations/:id
+```
+
+### delete locations
+
+```http
+DELETE /locations/:id
 ```
