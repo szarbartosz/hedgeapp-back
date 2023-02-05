@@ -94,13 +94,31 @@ POST /locations
 }
 ```
 
+### update location
+
+```http
+PUT /locations/:id
+```
+
+```js
+{
+  status_id: int,
+  developer_id: int,
+  name: string,
+  issue_date: string, // ISO 8601
+  inspection_date: string, // ISO 8601
+  deforestation_date: string, // ISO 8601
+  planting_date: string // ISO 8601
+}
+```
+
 ### get locations
 
 ```http
 GET /locations
 ```
 
-### get single locations
+### get single location
 
 ```http
 GET /locations/:id

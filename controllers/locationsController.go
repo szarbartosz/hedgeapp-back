@@ -43,6 +43,31 @@ func CreateLocation(c *gin.Context) {
 	})
 }
 
+func UpdateLocation(c *gin.Context) {
+	user, _ := c.Get("user")
+	var body models.Location
+
+	if c.BindJSON(&body) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid request body",
+		})
+		return
+	}
+
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Where("ID", c.Param("id")).Updates(&body)
+
+	if result.RowsAffected == 0 {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to update location",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"location": body,
+	})
+}
+
 func GetLocations(c *gin.Context) {
 	user, _ := c.Get("user")
 	var locations []models.Location

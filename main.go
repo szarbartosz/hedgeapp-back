@@ -23,6 +23,8 @@ func main() {
 	r.POST("/developers", middleware.RequireAuth, controllers.CreateDeveloper)
 	r.POST("/locations", middleware.RequireAuth, controllers.CreateLocation)
 
+	r.PUT("/locations/:id", middleware.RequireAuth, controllers.UpdateLocation)
+
 	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
 	r.GET("/statuses", middleware.RequireAuth, controllers.GetStatuses)
 	r.GET("/developers", middleware.RequireAuth, controllers.GetDevelopers)
