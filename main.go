@@ -19,8 +19,12 @@ func main() {
 
 	r.POST("/register", controllers.Register)
 	r.POST("/login", controllers.Login)
+	r.POST("/status", middleware.RequireAuth, controllers.CreateStatus)
+
 	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
-	r.DELETE("/delete/user", middleware.RequireAuth, controllers.Delete)
+	r.GET("/status", middleware.RequireAuth, controllers.GetStatuses)
+
+	r.DELETE("/user", middleware.RequireAuth, controllers.DeleteUser)
 
 	r.Run()
 }
