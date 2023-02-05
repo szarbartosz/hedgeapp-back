@@ -60,3 +60,48 @@ func GetLocations(c *gin.Context) {
 		"locations": locations,
 	})
 }
+
+func GetSingleLocation(c *gin.Context) {
+	user, _ := c.Get("user")
+	var location models.Location
+
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).First(&location, c.Param("id"))
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to get location",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"location": location,
+	})
+}
+
+func DeleteLocation(c *gin.Context) {
+	user, _ := c.Get("user")
+	var location models.Location
+
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).First(&location, c.Param("id"))
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Location not found",
+		})
+		return
+	}
+
+	initializers.DB.Delete(&location)
+
+	if initializers.DB.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to delete location",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Location deleted",
+	})
+}

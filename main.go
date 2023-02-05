@@ -19,16 +19,18 @@ func main() {
 
 	r.POST("/register", controllers.Register)
 	r.POST("/login", controllers.Login)
-	r.POST("/status", middleware.RequireAuth, controllers.CreateStatus)
-	r.POST("/developer", middleware.RequireAuth, controllers.CreateDeveloper)
-	r.POST("/location", middleware.RequireAuth, controllers.CreateLocation)
+	r.POST("/statuses", middleware.RequireAuth, controllers.CreateStatus)
+	r.POST("/developers", middleware.RequireAuth, controllers.CreateDeveloper)
+	r.POST("/locations", middleware.RequireAuth, controllers.CreateLocation)
 
 	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
-	r.GET("/status", middleware.RequireAuth, controllers.GetStatuses)
-	r.GET("/developer", middleware.RequireAuth, controllers.GetDevelopers)
-	r.GET("/location", middleware.RequireAuth, controllers.GetLocations)
+	r.GET("/statuses", middleware.RequireAuth, controllers.GetStatuses)
+	r.GET("/developers", middleware.RequireAuth, controllers.GetDevelopers)
+	r.GET("/locations", middleware.RequireAuth, controllers.GetLocations)
+	r.GET("/locations/:id", middleware.RequireAuth, controllers.GetSingleLocation)
 
-	r.DELETE("/user", middleware.RequireAuth, controllers.DeleteUser)
+	r.DELETE("/users", middleware.RequireAuth, controllers.DeleteUser)
+	r.DELETE("/locations/:id", middleware.RequireAuth, controllers.DeleteLocation)
 
 	r.Run()
 }
