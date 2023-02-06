@@ -19,7 +19,9 @@ jobs:
             - "/go/pkg/mod"
       - run:
           name: Run tests
-          command: go test
+          command: |
+            mkdir -p /tmp/test-reports
+            gotestsum --junitfile /tmp/test-reports/unit-tests.xml
 
 workflows:
   sample:
