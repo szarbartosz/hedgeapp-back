@@ -18,8 +18,8 @@ jobs:
           paths:
             - "/go/pkg/mod"
       - run:
-        name: Run tests
-        command: go test
+          name: Run tests
+          command: go test
 
 workflows:
   sample:
