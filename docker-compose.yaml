@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+  hedgeapp-db:
+    image: mysql:8.0
+    container_name: hedgeapp-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - 3308:3306
+    networks:
+      - app-network
+  hedgeapp-back:
+    build: .
+    container_name: hedgeapp-back
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
+    depends_on:
+      - hedgeapp-db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
