@@ -16,6 +16,7 @@ services:
   hedgeapp-back:
     build: .
     container_name: hedgeapp-back
+    restart: always
     env_file:
       - .env
     ports:
