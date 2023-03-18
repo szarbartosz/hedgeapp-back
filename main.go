@@ -16,6 +16,7 @@ func init() {
 
 func main() {
 	r := gin.Default()
+	r.Use(middleware.HandleCORS())
 
 	r.POST("/register", controllers.Register)
 	r.POST("/login", controllers.Login)
