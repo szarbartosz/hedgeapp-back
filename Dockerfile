@@ -1,6 +1,6 @@
 FROM golang:1.19.3-alpine
 
-WORKDIR /back
+WORKDIR /app
 
 COPY go.mod go.sum ./
 RUN go mod download
