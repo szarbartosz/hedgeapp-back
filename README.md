@@ -1,5 +1,13 @@
 # hedgeapp backend :hedgehog:
 
+## dev quickstart :construction:
+
+```bash
+$ docker-compose up --build -d
+```
+
+---
+
 ## User
 
 ### register
