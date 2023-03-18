@@ -8,9 +8,11 @@ $ docker-compose up --build -d
 
 ---
 
-## User
+## docs
 
-### register
+### User
+
+#### register
 
 ```http
 POST /register
@@ -23,7 +25,7 @@ POST /register
 }
 ```
 
-### login
+#### login
 
 ```http
 POST /login
@@ -36,15 +38,15 @@ POST /login
 }
 ```
 
-### delete user
+#### delete user
 
 ```http
 DELETE /delete/users
 ```
 
-## Status
+### Status
 
-### create status
+#### create status
 
 ```http
 POST /statuses
@@ -56,15 +58,15 @@ POST /statuses
 }
 ```
 
-### get statuses
+#### get statuses
 
 ```http
 GET /statuses
 ```
 
-## Developer
+### Developer
 
-### create developer
+#### create developer
 
 ```http
 POST /developers
@@ -76,15 +78,15 @@ POST /developers
 }
 ```
 
-### get developers
+#### get developers
 
 ```http
 GET /developers
 ```
 
-## Locations
+### Location
 
-### create location
+#### create location
 
 ```http
 POST /locations
@@ -102,7 +104,7 @@ POST /locations
 }
 ```
 
-### update location
+#### update location
 
 ```http
 PUT /locations/:id
@@ -120,19 +122,19 @@ PUT /locations/:id
 }
 ```
 
-### get locations
+#### get locations
 
 ```http
 GET /locations
 ```
 
-### get single location
+#### get single location
 
 ```http
 GET /locations/:id
 ```
 
-### delete location
+#### delete location
 
 ```http
 DELETE /locations/:id
