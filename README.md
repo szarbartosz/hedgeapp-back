@@ -100,7 +100,9 @@ POST /locations
   issue_date: string, // ISO 8601
   inspection_date: string, // ISO 8601
   deforestation_date: string, // ISO 8601
-  planting_date: string // ISO 8601
+  planting_date: string, // ISO 8601
+  deforestation_done: boolean,
+  planting_done: boolean
 }
 ```
 
@@ -118,7 +120,9 @@ PUT /locations/:id
   issue_date: string, // ISO 8601
   inspection_date: string, // ISO 8601
   deforestation_date: string, // ISO 8601
-  planting_date: string // ISO 8601
+  planting_date: string, // ISO 8601
+  deforestation_done: boolean,
+  planting_done: boolean
 }
 ```
 

@@ -15,4 +15,6 @@ type Location struct {
 	InspectionDate    *time.Time `json:"inspection_date"`
 	DeforestationDate *time.Time `json:"deforestation_date"`
 	PlantingDate      *time.Time `json:"planting_date"`
+	DeforestationDone bool       `json:"deforestation_done"`
+	PlantingDone      bool       `json:"planting_done"`
 }
