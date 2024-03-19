@@ -1,19 +1,18 @@
 version: "3.9"
 services:
-  hedgeapp-db:
-    image: mysql:8.0
-    container_name: hedgeapp-db
+  database:
+    image: postgres:alpine
+    container_name: hedheapp-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - 3308:3306
+      - 9920:5432
     networks:
       - app-network
-  hedgeapp-back:
+  backend:
     build: .
     container_name: hedgeapp-back
     restart: always
@@ -22,7 +21,7 @@ services:
     ports:
       - 4000:3000
     depends_on:
-      - hedgeapp-db
+      - database
     networks:
       - app-network
 
