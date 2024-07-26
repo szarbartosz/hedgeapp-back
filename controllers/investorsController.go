@@ -8,9 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateDeveloper(c *gin.Context) {
+func CreateInvestor(c *gin.Context) {
 	user, _ := c.Get("user")
-	var body models.Developer
+	var body models.Investor
 
 	if c.BindJSON(&body) != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -19,36 +19,36 @@ func CreateDeveloper(c *gin.Context) {
 		return
 	}
 
-	developer := models.Developer{Name: body.Name, UserID: user.(models.User).ID}
-	result := initializers.DB.Create(&developer)
+	investor := models.Investor{Name: body.Name, UserID: user.(models.User).ID}
+	result := initializers.DB.Create(&investor)
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to create developer",
+			"error": "Failed to create investor",
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message":   "Developer created successfully",
-		"developer": developer,
+		"message":  "Investor created successfully",
+		"investor": investor,
 	})
 }
 
-func GetDevelopers(c *gin.Context) {
+func GetInvestors(c *gin.Context) {
 	user, _ := c.Get("user")
-	var developers []models.Developer
+	var investors []models.Investor
 
-	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Find(&developers)
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Find(&investors)
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to get developers",
+			"error": "Failed to get investors",
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"developers": developers,
+		"investors": investors,
 	})
 }

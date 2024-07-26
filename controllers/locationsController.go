@@ -24,12 +24,18 @@ func CreateLocation(c *gin.Context) {
 		IssueDate:         body.IssueDate,
 		InspectionDate:    body.InspectionDate,
 		DeforestationDate: body.DeforestationDate,
-		DeforestationDone: body.DeforestationDone,
+		DeforestationDone: false,
 		PlantingDate:      body.PlantingDate,
-		PlantingDone:      body.PlantingDone,
+		PlantingDone:      false,
 		UserID:            user.(models.User).ID,
 		StatusID:          body.StatusID,
-		DeveloperID:       body.DeveloperID,
+		InvestorID:        body.InvestorID,
+		Address: models.Address{
+			City:    body.Address.City,
+			Street:  body.Address.Street,
+			Number:  body.Address.Number,
+			ZipCode: body.Address.ZipCode,
+		},
 	}
 	result := initializers.DB.Create(&location)
 
@@ -56,7 +62,7 @@ func UpdateLocation(c *gin.Context) {
 		return
 	}
 
-	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Where("ID", c.Param("id")).Updates(&body)
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Where("id", c.Param("id")).Updates(&body)
 
 	if result.RowsAffected == 0 {
 		c.JSON(http.StatusInternalServerError, gin.H{
