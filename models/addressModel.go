@@ -1,10 +1,17 @@
 package models
 
+type OwnerType string
+
+const (
+	InvestorType OwnerType = "Investor"
+	LocationType OwnerType = "Location"
+)
+
 type Address struct {
-	ID         uint `gorm:"primaryKey" json:"id"`
-	UserID     uint `json:"userId"`
-	InvestorID uint `json:"investorId"`
-	LocationID uint `json:"locationId"`
+	ID        uint   `gorm:"primaryKey" json:"id"`
+	UserID    uint   `json:"userId"`
+	OwnerID   uint   `json:"ownerId"`
+	OwnerType string `json:"ownerType"`
 
 	City    string `json:"city"`
 	Street  string `json:"street"`

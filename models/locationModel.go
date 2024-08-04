@@ -10,7 +10,7 @@ type Location struct {
 	StatusID    uint        `json:"statusId"`
 	InvestorID  uint        `json:"investorId"`
 	OfficeID    uint        `json:"officeId"`
-	Address     Address     `json:"address"`
+	Address     Address     `gorm:"polymorphic:Owner;" json:"address"`
 	Application Application `json:"application"`
 	Notes       []Note      `json:"notes"`
 
