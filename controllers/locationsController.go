@@ -30,6 +30,16 @@ func CreateLocation(c *gin.Context) {
 		UserID:            user.(models.User).ID,
 		StatusID:          body.StatusID,
 		InvestorID:        body.InvestorID,
+		Application: models.Application{
+			UserID:                    user.(models.User).ID,
+			Signature:                 body.Application.Signature,
+			IsDeforestationCommercial: body.Application.IsDeforestationCommercial,
+			DeforestationCause:        body.Application.DeforestationCause,
+			DeforestationDate:         body.Application.DeforestationDate,
+			PlantingDate:              body.Application.PlantingDate,
+			PlantingPlace:             body.Application.PlantingPlace,
+			Species:                   body.Application.Species,
+		},
 		Address: models.Address{
 			UserID:  user.(models.User).ID,
 			City:    body.Address.City,
@@ -62,7 +72,7 @@ func UpdateLocation(c *gin.Context) {
 	}
 
 	var location models.Location
-	result := initializers.DB.Preload("Address").Where("user_id = ?", user.(models.User).ID).Where("id = ?", c.Param("id")).First(&location)
+	result := initializers.DB.Preload("Application").Preload("Address").Where("user_id = ?", user.(models.User).ID).Where("id = ?", c.Param("id")).First(&location)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Location not found",
@@ -80,6 +90,14 @@ func UpdateLocation(c *gin.Context) {
 	location.UserID = user.(models.User).ID
 	location.StatusID = body.StatusID
 	location.InvestorID = body.InvestorID
+
+	location.Application.Signature = body.Application.Signature
+	location.Application.IsDeforestationCommercial = body.Application.IsDeforestationCommercial
+	location.Application.DeforestationCause = body.Application.DeforestationCause
+	location.Application.DeforestationDate = body.Application.DeforestationDate
+	location.Application.PlantingDate = body.Application.PlantingDate
+	location.Application.PlantingPlace = body.Application.PlantingPlace
+	location.Application.Species = body.Application.Species
 
 	location.Address.City = body.Address.City
 	location.Address.Street = body.Address.Street
@@ -115,7 +133,7 @@ func GetLocations(c *gin.Context) {
 	user, _ := c.Get("user")
 	var locations []models.Location
 
-	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Address").Find(&locations)
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Application").Preload("Address").Find(&locations)
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -133,7 +151,7 @@ func GetSingleLocation(c *gin.Context) {
 	user, _ := c.Get("user")
 	var location models.Location
 
-	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Address").First(&location, c.Param("id"))
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Application").Preload("Address").First(&location, c.Param("id"))
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
