@@ -19,7 +19,7 @@ func CreateLocation(c *gin.Context) {
 		return
 	}
 
-	location := models.Location{
+	location := initializers.DB.Create(&models.Location{
 		Name:              body.Name,
 		IssueDate:         body.IssueDate,
 		InspectionDate:    body.InspectionDate,
@@ -31,15 +31,14 @@ func CreateLocation(c *gin.Context) {
 		StatusID:          body.StatusID,
 		InvestorID:        body.InvestorID,
 		Address: models.Address{
+			UserID:  user.(models.User).ID,
 			City:    body.Address.City,
 			Street:  body.Address.Street,
 			Number:  body.Address.Number,
 			ZipCode: body.Address.ZipCode,
-		},
-	}
-	result := initializers.DB.Create(&location)
+		}})
 
-	if result.Error != nil {
+	if location.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to create location",
 		})
@@ -62,17 +61,53 @@ func UpdateLocation(c *gin.Context) {
 		return
 	}
 
-	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Where("id", c.Param("id")).Updates(&body)
+	var location models.Location
+	result := initializers.DB.Preload("Address").Where("user_id = ?", user.(models.User).ID).Where("id = ?", c.Param("id")).First(&location)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Location not found",
+		})
+		return
+	}
 
-	if result.RowsAffected == 0 {
+	location.Name = body.Name
+	location.IssueDate = body.IssueDate
+	location.InspectionDate = body.InspectionDate
+	location.DeforestationDate = body.DeforestationDate
+	location.DeforestationDone = body.DeforestationDone
+	location.PlantingDate = body.PlantingDate
+	location.PlantingDone = body.PlantingDone
+	location.UserID = user.(models.User).ID
+	location.StatusID = body.StatusID
+	location.InvestorID = body.InvestorID
+
+	location.Address.City = body.Address.City
+	location.Address.Street = body.Address.Street
+	location.Address.Number = body.Address.Number
+	location.Address.ZipCode = body.Address.ZipCode
+
+	tx := initializers.DB.Begin()
+
+	if err := tx.Save(&location).Error; err != nil {
+		tx.Rollback()
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to update location",
 		})
 		return
 	}
 
+	if err := tx.Save(&location.Address).Error; err != nil {
+		tx.Rollback()
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to update address",
+		})
+		return
+	}
+
+	tx.Commit()
+
 	c.JSON(http.StatusOK, gin.H{
-		"location": body,
+		"location": location,
 	})
 }
 
@@ -80,7 +115,7 @@ func GetLocations(c *gin.Context) {
 	user, _ := c.Get("user")
 	var locations []models.Location
 
-	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Find(&locations)
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Address").Find(&locations)
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -98,7 +133,7 @@ func GetSingleLocation(c *gin.Context) {
 	user, _ := c.Get("user")
 	var location models.Location
 
-	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).First(&location, c.Param("id"))
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Address").First(&location, c.Param("id"))
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
