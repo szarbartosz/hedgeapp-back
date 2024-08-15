@@ -133,7 +133,7 @@ func GetLocations(c *gin.Context) {
 	user, _ := c.Get("user")
 	var locations []models.Location
 
-	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Application").Preload("Address").Find(&locations)
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Application").Preload("Address").Preload("Notes").Find(&locations)
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -151,7 +151,7 @@ func GetSingleLocation(c *gin.Context) {
 	user, _ := c.Get("user")
 	var location models.Location
 
-	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Application").Preload("Address").First(&location, c.Param("id"))
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Application").Preload("Address").Preload("Notes").First(&location, c.Param("id"))
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -189,5 +189,93 @@ func DeleteLocation(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Location deleted",
+	})
+}
+
+func AddNote(c *gin.Context) {
+	user, _ := c.Get("user")
+	var body models.Note
+	var location models.Location
+
+	if c.BindJSON(&body) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid request body",
+		})
+		return
+	}
+
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).First(&location, c.Param("id"))
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Location not found",
+		})
+		return
+	}
+
+	note := initializers.DB.Create(&models.Note{
+		LocationID: location.ID,
+		Content:    body.Content,
+	})
+
+	if note.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to create note",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"note": note,
+	})
+}
+
+func UpdateNote(c *gin.Context) {
+	var body models.Note
+
+	if c.BindJSON(&body) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid request body",
+		})
+		return
+	}
+
+	result := initializers.DB.Where("id", c.Param("id")).Updates(&body)
+
+	if result.RowsAffected == 0 {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to update note",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Note updated successfully",
+	})
+}
+
+func DeleteNote(c *gin.Context) {
+	var note models.Note
+
+	result := initializers.DB.Where("id", c.Param("id")).First(&note)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Note not found",
+		})
+		return
+	}
+
+	deleteResult := initializers.DB.Delete(&note)
+
+	if deleteResult.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to delete note: " + deleteResult.Error.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Note deleted",
 	})
 }

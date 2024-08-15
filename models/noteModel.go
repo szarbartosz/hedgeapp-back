@@ -1,12 +1,10 @@
 package models
 
-import "time"
-
 type Note struct {
+	CommonModel
 	ID         uint `gorm:"primaryKey" json:"id"`
 	UserID     uint `json:"userId"`
 	LocationID uint `json:"locationId"`
 
-	CreationDate *time.Time `json:"creationDate"`
-	Content      string     `json:"content"`
+	Content string `json:"content"`
 }

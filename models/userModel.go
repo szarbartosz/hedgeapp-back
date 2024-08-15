@@ -1,9 +1,7 @@
 package models
 
-import "gorm.io/gorm"
-
 type User struct {
-	gorm.Model
+	CommonModel
 	Investors []Investor `json:"investors"`
 	Locations []Location `json:"locations"`
 

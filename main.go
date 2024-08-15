@@ -23,10 +23,12 @@ func main() {
 	r.POST("/statuses", middleware.RequireAuth, controllers.CreateStatus)
 	r.POST("/investors", middleware.RequireAuth, controllers.CreateInvestor)
 	r.POST("/locations", middleware.RequireAuth, controllers.CreateLocation)
+	r.POST("/locations/:id/notes", middleware.RequireAuth, controllers.AddNote)
 
 	r.PUT("/statuses/:id", middleware.RequireAuth, controllers.UpdateStatus)
 	r.PUT("/investors/:id", middleware.RequireAuth, controllers.UpdateInvestor)
 	r.PUT("/locations/:id", middleware.RequireAuth, controllers.UpdateLocation)
+	r.PUT("/notes/:id", middleware.RequireAuth, controllers.UpdateNote)
 
 	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
 	r.GET("/statuses", middleware.RequireAuth, controllers.GetStatuses)
@@ -39,6 +41,7 @@ func main() {
 	r.DELETE("/statuses/:id", middleware.RequireAuth, controllers.DeleteStatus)
 	r.DELETE("/investors/:id", middleware.RequireAuth, controllers.DeleteInvestor)
 	r.DELETE("/locations/:id", middleware.RequireAuth, controllers.DeleteLocation)
+	r.DELETE("/notes/:id", middleware.RequireAuth, controllers.DeleteNote)
 
 	r.Run()
 }
