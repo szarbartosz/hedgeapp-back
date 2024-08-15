@@ -98,7 +98,7 @@ func GetInvestors(c *gin.Context) {
 	user, _ := c.Get("user")
 	var investors []models.Investor
 
-	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Address").Find(&investors)
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Address").Preload("Locations").Find(&investors)
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
