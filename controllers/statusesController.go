@@ -75,9 +75,10 @@ func UpdateStatus(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Status updated successfully",
-	})
+	var updatedStatus models.Status
+	initializers.DB.First(&updatedStatus, c.Param("id"))
+
+	c.JSON(http.StatusOK, updatedStatus)
 }
 
 func GetStatuses(c *gin.Context) {
