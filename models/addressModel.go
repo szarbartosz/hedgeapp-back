@@ -5,6 +5,7 @@ type OwnerType string
 const (
 	InvestorType OwnerType = "Investor"
 	LocationType OwnerType = "Location"
+	OfficeType   OwnerType = "Office"
 )
 
 type Address struct {
