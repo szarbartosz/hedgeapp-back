@@ -19,8 +19,8 @@ func CreateStatus(c *gin.Context) {
 	}
 
 	status := models.Status{Name: body.Name}
-	result := initializers.DB.Create(&status)
 
+	result := initializers.DB.Create(&status)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to create status",
@@ -28,9 +28,7 @@ func CreateStatus(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"status": status,
-	})
+	c.JSON(http.StatusOK, status)
 }
 
 func UpdateStatus(c *gin.Context) {
@@ -52,9 +50,10 @@ func UpdateStatus(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Status updated successfully",
-	})
+	var updatedStatus models.Status
+	initializers.DB.First(&updatedStatus, c.Param("id"))
+
+	c.JSON(http.StatusOK, updatedStatus)
 }
 
 func GetStatuses(c *gin.Context) {
@@ -69,9 +68,7 @@ func GetStatuses(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"statuses": statuses,
-	})
+	c.JSON(http.StatusOK, statuses)
 }
 
 func DeleteStatus(c *gin.Context) {

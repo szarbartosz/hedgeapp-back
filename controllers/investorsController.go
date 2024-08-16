@@ -19,7 +19,7 @@ func CreateInvestor(c *gin.Context) {
 		return
 	}
 
-	investor := initializers.DB.Create(&models.Investor{
+	investor := models.Investor{
 		Name:   body.Name,
 		UserID: user.(models.User).ID,
 		Address: models.Address{
@@ -28,18 +28,17 @@ func CreateInvestor(c *gin.Context) {
 			Street:  body.Address.Street,
 			Number:  body.Address.Number,
 			ZipCode: body.Address.ZipCode,
-		}})
+		}}
 
-	if investor.Error != nil {
+	result := initializers.DB.Create(&investor)
+	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to create investor",
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"investor": investor,
-	})
+	c.JSON(http.StatusOK, investor)
 }
 
 func UpdateInvestor(c *gin.Context) {
@@ -89,9 +88,7 @@ func UpdateInvestor(c *gin.Context) {
 
 	tx.Commit()
 
-	c.JSON(http.StatusOK, gin.H{
-		"investor": investor,
-	})
+	c.JSON(http.StatusOK, investor)
 }
 
 func GetInvestors(c *gin.Context) {
@@ -107,9 +104,7 @@ func GetInvestors(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"investors": investors,
-	})
+	c.JSON(http.StatusOK, investors)
 }
 
 func GetSingleInvestor(c *gin.Context) {
@@ -125,9 +120,7 @@ func GetSingleInvestor(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"investor": investor,
-	})
+	c.JSON(http.StatusOK, investor)
 }
 
 func DeleteInvestor(c *gin.Context) {

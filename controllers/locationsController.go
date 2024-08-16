@@ -19,7 +19,7 @@ func CreateLocation(c *gin.Context) {
 		return
 	}
 
-	location := initializers.DB.Create(&models.Location{
+	location := models.Location{
 		Name:              body.Name,
 		IssueDate:         body.IssueDate,
 		InspectionDate:    body.InspectionDate,
@@ -46,18 +46,17 @@ func CreateLocation(c *gin.Context) {
 			Street:  body.Address.Street,
 			Number:  body.Address.Number,
 			ZipCode: body.Address.ZipCode,
-		}})
+		}}
 
-	if location.Error != nil {
+	result := initializers.DB.Create(&location)
+	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to create location",
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"location": location,
-	})
+	c.JSON(http.StatusOK, location)
 }
 
 func UpdateLocation(c *gin.Context) {
@@ -124,9 +123,7 @@ func UpdateLocation(c *gin.Context) {
 
 	tx.Commit()
 
-	c.JSON(http.StatusOK, gin.H{
-		"location": location,
-	})
+	c.JSON(http.StatusOK, location)
 }
 
 func GetLocations(c *gin.Context) {
@@ -142,9 +139,7 @@ func GetLocations(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"locations": locations,
-	})
+	c.JSON(http.StatusOK, locations)
 }
 
 func GetSingleLocation(c *gin.Context) {
@@ -160,9 +155,7 @@ func GetSingleLocation(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"location": location,
-	})
+	c.JSON(http.StatusOK, location)
 }
 
 func DeleteLocation(c *gin.Context) {
@@ -213,21 +206,19 @@ func AddNote(c *gin.Context) {
 		return
 	}
 
-	note := initializers.DB.Create(&models.Note{
+	note := models.Note{
 		LocationID: location.ID,
 		Content:    body.Content,
-	})
-
-	if note.Error != nil {
+	}
+	result = initializers.DB.Create(&note)
+	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to create note",
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"note": note,
-	})
+	c.JSON(http.StatusOK, note)
 }
 
 func UpdateNote(c *gin.Context) {
@@ -249,9 +240,10 @@ func UpdateNote(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Note updated successfully",
-	})
+	var updatedNote models.Note
+	initializers.DB.First(&updatedNote, c.Param("id"))
+
+	c.JSON(http.StatusOK, updatedNote)
 }
 
 func DeleteNote(c *gin.Context) {
