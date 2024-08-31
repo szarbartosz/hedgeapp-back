@@ -130,7 +130,7 @@ func GetLocations(c *gin.Context) {
 	user, _ := c.Get("user")
 	var locations []models.Location
 
-	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Application").Preload("Address").Preload("Notes").Find(&locations)
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Application").Preload("Address").Preload("Notes").Preload("Investor").Find(&locations)
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -146,7 +146,7 @@ func GetSingleLocation(c *gin.Context) {
 	user, _ := c.Get("user")
 	var location models.Location
 
-	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Application").Preload("Address").Preload("Notes").First(&location, c.Param("id"))
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Application").Preload("Address").Preload("Notes").Preload("Investor").First(&location, c.Param("id"))
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
