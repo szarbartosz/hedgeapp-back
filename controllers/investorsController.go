@@ -20,8 +20,13 @@ func CreateInvestor(c *gin.Context) {
 	}
 
 	investor := models.Investor{
-		Name:   body.Name,
-		UserID: user.(models.User).ID,
+		Name:          body.Name,
+		UserID:        user.(models.User).ID,
+		ContactPerson: body.ContactPerson,
+		Email:         body.Email,
+		Phone:         body.Phone,
+		Nip:           body.Nip,
+		Regon:         body.Regon,
 		Address: models.Address{
 			UserID:  user.(models.User).ID,
 			City:    body.Address.City,
@@ -62,6 +67,11 @@ func UpdateInvestor(c *gin.Context) {
 	}
 
 	investor.Name = body.Name
+	investor.ContactPerson = body.ContactPerson
+	investor.Email = body.Email
+	investor.Phone = body.Phone
+	investor.Nip = body.Nip
+	investor.Regon = body.Regon
 
 	investor.Address.City = body.Address.City
 	investor.Address.Street = body.Address.Street
