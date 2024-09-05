@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm/clause"
 )
 
 func CreateLocation(c *gin.Context) {
@@ -20,6 +21,10 @@ func CreateLocation(c *gin.Context) {
 	}
 
 	location := models.Location{
+		UserID:            user.(models.User).ID,
+		StatusID:          body.StatusID,
+		InvestorID:        body.InvestorID,
+		OfficeID:          body.OfficeID,
 		Name:              body.Name,
 		IssueDate:         body.IssueDate,
 		InspectionDate:    body.InspectionDate,
@@ -27,9 +32,6 @@ func CreateLocation(c *gin.Context) {
 		DeforestationDone: false,
 		PlantingDate:      body.PlantingDate,
 		PlantingDone:      false,
-		UserID:            user.(models.User).ID,
-		StatusID:          body.StatusID,
-		InvestorID:        body.InvestorID,
 		Application: models.Application{
 			UserID:                    user.(models.User).ID,
 			Signature:                 body.Application.Signature,
@@ -130,7 +132,7 @@ func GetLocations(c *gin.Context) {
 	user, _ := c.Get("user")
 	var locations []models.Location
 
-	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Application").Preload("Address").Preload("Notes").Preload("Investor").Find(&locations)
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Office.Address").Preload("Investor.Address").Preload(clause.Associations).Find(&locations)
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -146,7 +148,7 @@ func GetSingleLocation(c *gin.Context) {
 	user, _ := c.Get("user")
 	var location models.Location
 
-	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Application").Preload("Address").Preload("Notes").Preload("Investor").First(&location, c.Param("id"))
+	result := initializers.DB.Where("user_id = ?", user.(models.User).ID).Preload("Office.Address").Preload("Investor.Address").Preload(clause.Associations).First(&location, c.Param("id"))
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

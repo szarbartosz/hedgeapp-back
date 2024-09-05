@@ -4,7 +4,8 @@ type Investor struct {
 	ID        uint       `gorm:"primaryKey" json:"id"`
 	UserID    uint       `json:"userId"`
 	Locations []Location `json:"locations"`
-	Address   Address    `gorm:"polymorphic:Owner;" json:"address"`
+	AddressID uint       `json:"addressId"`
+	Address   Address    `gorm:"foreignKey:AddressID" json:"address"`
 
 	Name          string `gorm:"unique" json:"name"`
 	ContactPerson string `json:"contactPerson"`

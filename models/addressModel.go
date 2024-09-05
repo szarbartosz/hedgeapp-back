@@ -9,10 +9,8 @@ const (
 )
 
 type Address struct {
-	ID        uint   `gorm:"primaryKey" json:"id"`
-	UserID    uint   `json:"userId"`
-	OwnerID   uint   `json:"ownerId"`
-	OwnerType string `json:"ownerType"`
+	ID     uint `gorm:"primaryKey" json:"id"`
+	UserID uint `json:"userId"`
 
 	City    string `json:"city"`
 	Street  string `json:"street"`

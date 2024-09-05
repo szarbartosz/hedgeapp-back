@@ -8,10 +8,13 @@ type Location struct {
 	ID          uint        `gorm:"primaryKey" json:"id"`
 	UserID      uint        `json:"userId"`
 	StatusID    uint        `json:"statusId"`
+	Status      Status      `gorm:"foreignKey:StatusID" json:"status"`
 	OfficeID    uint        `json:"officeId"`
+	Office      Office      `gorm:"foreignKey:OfficeID" json:"office"`
 	InvestorID  uint        `json:"investorId"`
 	Investor    Investor    `gorm:"foreignKey:InvestorID" json:"investor"`
-	Address     Address     `gorm:"polymorphic:Owner;" json:"address"`
+	AddressID   uint        `json:"addressId"`
+	Address     Address     `gorm:"foreignKey:AddressID" json:"address"`
 	Application Application `json:"application"`
 	Notes       []Note      `json:"notes"`
 
