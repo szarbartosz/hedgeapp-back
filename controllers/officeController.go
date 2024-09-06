@@ -107,7 +107,7 @@ func GetOffices(c *gin.Context) {
 func GetSingleOffice(c *gin.Context) {
 	var office models.Office
 
-	result := initializers.DB.First(&office, c.Param("id"))
+	result := initializers.DB.Preload("Address").Preload("Locations").First(&office, c.Param("id"))
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
