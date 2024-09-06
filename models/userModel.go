@@ -5,6 +5,8 @@ type User struct {
 	Investors []Investor `json:"investors"`
 	Locations []Location `json:"locations"`
 
-	Email    string `gorm:"unique" json:"email"`
-	Password string `json:"password"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Email     string `gorm:"unique" json:"email"`
+	Password  string `json:"password"`
 }
