@@ -15,11 +15,16 @@ import (
 
 func RequireAuth(c *gin.Context) {
 	var err error
-	tokenString := strings.Split(c.GetHeader("Authorization"), " ")[1]
+	authHeader := c.GetHeader("Authorization")
+	parts := strings.Split(authHeader, " ")
+
+	tokenString := ""
+	if len(parts) == 2 {
+		tokenString = parts[1]
+	}
 
 	if tokenString == "" {
 		tokenString, err = c.Cookie("Authorization")
-
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"error": "Unauthorized",
