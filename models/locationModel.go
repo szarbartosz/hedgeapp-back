@@ -5,16 +5,26 @@ import (
 )
 
 type Location struct {
-	ID          uint `gorm:"primaryKey" json:"id"`
-	UserID      uint `json:"user_id"`
-	StatusID    uint `json:"status_id"`
-	DeveloperID uint `json:"developer_id"`
+	ID          uint        `gorm:"primaryKey" json:"id"`
+	UserID      uint        `json:"userId"`
+	StatusID    uint        `json:"statusId"`
+	Status      Status      `gorm:"foreignKey:StatusID" json:"status"`
+	OfficeID    uint        `json:"officeId"`
+	Office      Office      `gorm:"foreignKey:OfficeID" json:"office"`
+	InvestorID  uint        `json:"investorId"`
+	Investor    Investor    `gorm:"foreignKey:InvestorID" json:"investor"`
+	AddressID   uint        `json:"addressId"`
+	Address     Address     `gorm:"foreignKey:AddressID" json:"address"`
+	Application Application `json:"application"`
+	Notes       []Note      `json:"notes"`
 
 	Name              string     `gorm:"unique" json:"name"`
-	IssueDate         *time.Time `json:"issue_date"`
-	InspectionDate    *time.Time `json:"inspection_date"`
-	DeforestationDate *time.Time `json:"deforestation_date"`
-	PlantingDate      *time.Time `json:"planting_date"`
-	DeforestationDone bool       `json:"deforestation_done"`
-	PlantingDone      bool       `json:"planting_done"`
+	IssueDate         *time.Time `json:"issueDate"`
+	InspectionDate    *time.Time `json:"inspectionDate"`
+	DecisionDate      *time.Time `json:"decisionDate"`
+	DeforestationDate *time.Time `json:"deforestationDate"`
+	PlantingDate      *time.Time `json:"plantingDate"`
+	InspectionDone    bool       `json:"inspectionDone"`
+	DeforestationDone bool       `json:"deforestationDone"`
+	PlantingDone      bool       `json:"plantingDone"`
 }

@@ -64,12 +64,12 @@ POST /statuses
 GET /statuses
 ```
 
-### Developer
+### Investor
 
-#### create developer
+#### create investor
 
 ```http
-POST /developers
+POST /investors
 ```
 
 ```js
@@ -78,10 +78,10 @@ POST /developers
 }
 ```
 
-#### get developers
+#### get investors
 
 ```http
-GET /developers
+GET /investors
 ```
 
 ### Location
@@ -94,15 +94,15 @@ POST /locations
 
 ```js
 {
-  status_id: int,
-  developer_id: int,
+  statusId: int,
+  investorId: int,
   name: string,
-  issue_date: string, // ISO 8601
-  inspection_date: string, // ISO 8601
-  deforestation_date: string, // ISO 8601
-  planting_date: string, // ISO 8601
-  deforestation_done: boolean,
-  planting_done: boolean
+  issueDate: string, // ISO 8601
+  inspectionDate: string, // ISO 8601
+  deforestationDate: string, // ISO 8601
+  plantingDate: string, // ISO 8601
+  deforestationDone: boolean,
+  plantingDone: boolean
 }
 ```
 
@@ -114,15 +114,15 @@ PUT /locations/:id
 
 ```js
 {
-  status_id: int,
-  developer_id: int,
+  statusId: int,
+  investorId: int,
   name: string,
-  issue_date: string, // ISO 8601
-  inspection_date: string, // ISO 8601
-  deforestation_date: string, // ISO 8601
-  planting_date: string, // ISO 8601
-  deforestation_done: boolean,
-  planting_done: boolean
+  issueDate: string, // ISO 8601
+  inspectionDate: string, // ISO 8601
+  deforestationDate: string, // ISO 8601
+  plantingDate: string, // ISO 8601
+  deforestationDone: boolean,
+  plantingDone: boolean
 }
 ```
 

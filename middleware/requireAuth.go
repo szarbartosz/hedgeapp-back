@@ -6,6 +6,7 @@ import (
 	"main/models"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -13,13 +14,23 @@ import (
 )
 
 func RequireAuth(c *gin.Context) {
-	tokenString, err := c.Cookie("Authorization")
+	var err error
+	authHeader := c.GetHeader("Authorization")
+	parts := strings.Split(authHeader, " ")
 
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": "Unauthorized",
-		})
-		return
+	tokenString := ""
+	if len(parts) == 2 {
+		tokenString = parts[1]
+	}
+
+	if tokenString == "" {
+		tokenString, err = c.Cookie("Authorization")
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error": "Unauthorized",
+			})
+			return
+		}
 	}
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
