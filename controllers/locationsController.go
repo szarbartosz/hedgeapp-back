@@ -29,6 +29,7 @@ func CreateLocation(c *gin.Context) {
 		IssueDate:         body.IssueDate,
 		InspectionDate:    body.InspectionDate,
 		InspectionDone:    false,
+		DecisionDate:      body.DecisionDate,
 		DeforestationDate: body.DeforestationDate,
 		DeforestationDone: false,
 		PlantingDate:      body.PlantingDate,
@@ -86,6 +87,7 @@ func UpdateLocation(c *gin.Context) {
 	location.IssueDate = body.IssueDate
 	location.InspectionDate = body.InspectionDate
 	location.InspectionDone = body.InspectionDone
+	location.DecisionDate = body.DecisionDate
 	location.DeforestationDate = body.DeforestationDate
 	location.DeforestationDone = body.DeforestationDone
 	location.PlantingDate = body.PlantingDate
