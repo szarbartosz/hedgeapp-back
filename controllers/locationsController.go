@@ -35,14 +35,14 @@ func CreateLocation(c *gin.Context) {
 		PlantingDate:      body.PlantingDate,
 		PlantingDone:      false,
 		Application: models.Application{
-			UserID:                    user.(models.User).ID,
-			Signature:                 body.Application.Signature,
-			IsDeforestationCommercial: body.Application.IsDeforestationCommercial,
-			DeforestationCause:        body.Application.DeforestationCause,
-			DeforestationDate:         body.Application.DeforestationDate,
-			PlantingDate:              body.Application.PlantingDate,
-			PlantingPlace:             body.Application.PlantingPlace,
-			Species:                   body.Application.Species,
+			UserID:             user.(models.User).ID,
+			Signature:          body.Application.Signature,
+			IsCommercial:       body.Application.IsCommercial,
+			DeforestationCause: body.Application.DeforestationCause,
+			DeforestationDate:  body.Application.DeforestationDate,
+			PlantingDate:       body.Application.PlantingDate,
+			PlantingPlace:      body.Application.PlantingPlace,
+			Species:            body.Application.Species,
 		},
 		Address: models.Address{
 			UserID:  user.(models.User).ID,
@@ -97,7 +97,7 @@ func UpdateLocation(c *gin.Context) {
 	location.InvestorID = body.InvestorID
 
 	location.Application.Signature = body.Application.Signature
-	location.Application.IsDeforestationCommercial = body.Application.IsDeforestationCommercial
+	location.Application.IsCommercial = body.Application.IsCommercial
 	location.Application.DeforestationCause = body.Application.DeforestationCause
 	location.Application.DeforestationDate = body.Application.DeforestationDate
 	location.Application.PlantingDate = body.Application.PlantingDate
