@@ -1,14 +1,23 @@
-FROM golang:1.22.3-alpine
+# build a binary
+FROM golang:1.22.3-alpine AS builder
 
+RUN apk update && apk add --no-cache 'git=~2'
+
+
+ENV GO111MODULE=on
 WORKDIR /app
-
-COPY go.mod go.sum ./
-RUN go mod download
-
 COPY . .
 
-RUN go build -o main .
+RUN go get -d -v
+
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /binary .
+
+# build a small image
+FROM alpine:3
+
+WORKDIR /
+COPY --from=builder /binary /main
 
 EXPOSE 8080
 
-CMD ["./main"]
+ENTRYPOINT ["/main"]
