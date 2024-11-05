@@ -1,28 +1,42 @@
 services:
   database:
     image: postgres:alpine
-    container_name: hedheapp-db
-    restart: always
+    container_name: db
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - 9920:5432
+      - 5432:5432
     networks:
       - app-network
-  backend:
-    build: .
-    container_name: hedgeapp-back
-    restart: always
     env_file:
       - .env
+  backend:
+    build: .
+    container_name: backend
+    restart: unless-stopped
+    environment:
+      PORT: ${PORT}
+      GIN_MODE: ${GIN_MODE}
+      JWT_SECRET: ${JWT_SECRET}
+      ALLOWED_ORIGIN: ${ALLOWED_ORIGIN}
+      COOKIE_DOMAIN: ${COOKIE_DOMAIN}
+      SECURE_COOKIE: ${SECURE_COOKIE}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
     ports:
-      - 4000:3000
+      - 8080:8080
     depends_on:
       - database
     networks:
       - app-network
+    env_file:
+      - .env
 
 networks:
   app-network:

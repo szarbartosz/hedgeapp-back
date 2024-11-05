@@ -29,19 +29,20 @@ func CreateLocation(c *gin.Context) {
 		IssueDate:         body.IssueDate,
 		InspectionDate:    body.InspectionDate,
 		InspectionDone:    false,
+		DecisionDate:      body.DecisionDate,
 		DeforestationDate: body.DeforestationDate,
 		DeforestationDone: false,
 		PlantingDate:      body.PlantingDate,
 		PlantingDone:      false,
 		Application: models.Application{
-			UserID:                    user.(models.User).ID,
-			Signature:                 body.Application.Signature,
-			IsDeforestationCommercial: body.Application.IsDeforestationCommercial,
-			DeforestationCause:        body.Application.DeforestationCause,
-			DeforestationDate:         body.Application.DeforestationDate,
-			PlantingDate:              body.Application.PlantingDate,
-			PlantingPlace:             body.Application.PlantingPlace,
-			Species:                   body.Application.Species,
+			UserID:             user.(models.User).ID,
+			Signature:          body.Application.Signature,
+			IsCommercial:       body.Application.IsCommercial,
+			DeforestationCause: body.Application.DeforestationCause,
+			DeforestationDate:  body.Application.DeforestationDate,
+			PlantingDate:       body.Application.PlantingDate,
+			PlantingPlace:      body.Application.PlantingPlace,
+			Species:            body.Application.Species,
 		},
 		Address: models.Address{
 			UserID:  user.(models.User).ID,
@@ -86,6 +87,7 @@ func UpdateLocation(c *gin.Context) {
 	location.IssueDate = body.IssueDate
 	location.InspectionDate = body.InspectionDate
 	location.InspectionDone = body.InspectionDone
+	location.DecisionDate = body.DecisionDate
 	location.DeforestationDate = body.DeforestationDate
 	location.DeforestationDone = body.DeforestationDone
 	location.PlantingDate = body.PlantingDate
@@ -95,7 +97,7 @@ func UpdateLocation(c *gin.Context) {
 	location.InvestorID = body.InvestorID
 
 	location.Application.Signature = body.Application.Signature
-	location.Application.IsDeforestationCommercial = body.Application.IsDeforestationCommercial
+	location.Application.IsCommercial = body.Application.IsCommercial
 	location.Application.DeforestationCause = body.Application.DeforestationCause
 	location.Application.DeforestationDate = body.Application.DeforestationDate
 	location.Application.PlantingDate = body.Application.PlantingDate
@@ -116,6 +118,16 @@ func UpdateLocation(c *gin.Context) {
 		})
 		return
 	}
+
+	if err := tx.Save(&location.Address).Error; err != nil {
+		tx.Rollback()
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to update address",
+		})
+		return
+	}
+
+	tx.Commit()
 
 	if err := tx.Save(&location.Address).Error; err != nil {
 		tx.Rollback()

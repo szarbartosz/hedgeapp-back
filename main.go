@@ -4,6 +4,7 @@ import (
 	"main/controllers"
 	"main/initializers"
 	"main/middleware"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,6 +13,7 @@ func init() {
 	initializers.LoadEnvVariables()
 	initializers.ConnectToDB()
 	initializers.SyncDB()
+	gin.SetMode(os.Getenv("GIN_MODE"))
 }
 
 func main() {
