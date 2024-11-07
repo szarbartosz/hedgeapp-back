@@ -1,0 +1,12 @@
+[
+  { "id": 1, "name": "Nowa inwestycja" },
+  { "id": 2, "name": "Inwentaryzacja terenowa" },
+  { "id": 3, "name": "Inwentaryzacja kameralna" },
+  { "id": 4, "name": "Złożenie wniosku" },
+  { "id": 5, "name": "Uzupełnienie braków" },
+  { "id": 6, "name": "Oględziny" },
+  { "id": 7, "name": "Decyzja" },
+  { "id": 8, "name": "Wycinka" },
+  { "id": 8, "name": "Nasadzenia" },
+  { "id": 8, "name": "Inwestycja zakończona" }
+]

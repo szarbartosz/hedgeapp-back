@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "Wydział Kształtowania Środowiska",
+    "addressId": 1,
+    "address": {
+      "id": 1,
+      "city": "Kraków",
+      "street": "Piastowska",
+      "number": "10",
+      "zipCode": "31-085"
+    }
+  }
+]
