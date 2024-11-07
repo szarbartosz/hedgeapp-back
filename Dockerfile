@@ -17,6 +17,7 @@ FROM alpine:3
 
 WORKDIR /
 COPY --from=builder /binary /main
+COPY --from=builder /app/initializers/seeds /seeds
 
 EXPOSE 8080
 

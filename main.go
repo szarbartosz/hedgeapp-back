@@ -13,6 +13,7 @@ func init() {
 	initializers.LoadEnvVariables()
 	initializers.ConnectToDB()
 	initializers.SyncDB()
+	initializers.SeedDB()
 	gin.SetMode(os.Getenv("GIN_MODE"))
 }
 
