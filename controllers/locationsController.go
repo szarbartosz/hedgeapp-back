@@ -129,16 +129,6 @@ func UpdateLocation(c *gin.Context) {
 
 	tx.Commit()
 
-	if err := tx.Save(&location.Address).Error; err != nil {
-		tx.Rollback()
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to update address",
-		})
-		return
-	}
-
-	tx.Commit()
-
 	c.JSON(http.StatusOK, location)
 }
 
