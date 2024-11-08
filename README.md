@@ -3,9 +3,9 @@
 ## tech stack :wrench:
 
 ![Go](https://img.shields.io/badge/go-%23000000.svg?style=for-the-badge&logo=go&logoColor=white)
-![Svelte](https://img.shields.io/badge/gin-%23000000.svg?style=for-the-badge&logo=gin&logoColor=white)
-![Go](https://img.shields.io/badge/postgresql-%23000000.svg?style=for-the-badge&logo=postgresql&logoColor=white)
-![NestJS](https://img.shields.io/badge/docker-%23000000.svg?style=for-the-badge&logo=docker&logoColor=white)
+![Gin](https://img.shields.io/badge/gin-%23000000.svg?style=for-the-badge&logo=gin&logoColor=white)
+![Postgresql](https://img.shields.io/badge/postgresql-%23000000.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%23000000.svg?style=for-the-badge&logo=docker&logoColor=white)
 
 ## dev quickstart :construction:
 
