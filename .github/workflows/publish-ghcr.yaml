@@ -2,7 +2,7 @@ name: hedgeapp backend
 
 on:
   push:
-    branches: [master, develop]
+    branches: [main, develop]
 
 jobs:
   build-and-publish:
@@ -20,7 +20,7 @@ jobs:
 
       - name: Set image tag
         run: |
-          if [[ $GITHUB_REF == refs/heads/master ]]; then
+          if [[ $GITHUB_REF == refs/heads/main ]]; then
             IMAGE_TAG=latest
           elif [[ $GITHUB_REF == refs/heads/develop ]]; then
             IMAGE_TAG=develop
