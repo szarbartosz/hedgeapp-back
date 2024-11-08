@@ -41,7 +41,7 @@ func CreateLocation(c *gin.Context) {
 			DeforestationCause: body.Application.DeforestationCause,
 			DeforestationDate:  body.Application.DeforestationDate,
 			PlantingDate:       body.Application.PlantingDate,
-			PlantingPlace:      body.Application.PlantingPlace,
+			PlantingSite:       body.Application.PlantingSite,
 			Species:            body.Application.Species,
 		},
 		Address: models.Address{
@@ -101,7 +101,7 @@ func UpdateLocation(c *gin.Context) {
 	location.Application.DeforestationCause = body.Application.DeforestationCause
 	location.Application.DeforestationDate = body.Application.DeforestationDate
 	location.Application.PlantingDate = body.Application.PlantingDate
-	location.Application.PlantingPlace = body.Application.PlantingPlace
+	location.Application.PlantingSite = body.Application.PlantingSite
 	location.Application.Species = body.Application.Species
 
 	location.Address.City = body.Address.City
@@ -115,6 +115,14 @@ func UpdateLocation(c *gin.Context) {
 		tx.Rollback()
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to update location",
+		})
+		return
+	}
+
+	if err := tx.Save(&location.Application).Error; err != nil {
+		tx.Rollback()
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to update application",
 		})
 		return
 	}
