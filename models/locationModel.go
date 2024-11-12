@@ -18,7 +18,7 @@ type Location struct {
 	Application Application `json:"application"`
 	Notes       []Note      `json:"notes"`
 
-	Name              string     `gorm:"unique" json:"name"`
+	Name              string     `json:"name"`
 	IssueDate         *time.Time `json:"issueDate"`
 	InspectionDate    *time.Time `json:"inspectionDate"`
 	DecisionDate      *time.Time `json:"decisionDate"`
