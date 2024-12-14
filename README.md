@@ -56,7 +56,6 @@ $ docker compose up --build -d
 │   ├── statusModel.go
 │   └── userModel.go
 ├── test
-│   └── example_test.go
 ├── tmp
 └── validators
     └── usersValidator.go
