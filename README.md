@@ -1,5 +1,7 @@
 # hedgeapp backend :hedgehog:
 
+Backend of an application created to streamline and enhance the inventory processes for individuals and teams managing green areas.
+
 ## tech stack :wrench:
 
 ![Go](https://img.shields.io/badge/go-%23000000.svg?style=for-the-badge&logo=go&logoColor=white)
