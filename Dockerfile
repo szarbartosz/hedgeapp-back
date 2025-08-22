@@ -1,5 +1,5 @@
 # build a binary
-FROM golang:1.22.3-alpine AS builder
+FROM golang:1.24.5-alpine AS builder
 
 RUN apk update && apk add --no-cache 'git=~2'
 
