@@ -9,14 +9,42 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+func validateLocationRefs(c *gin.Context, body models.Location, userID uint) bool {
+	var count int64
+
+	if err := initializers.DB.Model(&models.Status{}).Where("id = ?", body.StatusID).Count(&count).Error; err != nil || count == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Unknown statusId",
+		})
+		return false
+	}
+
+	if err := initializers.DB.Model(&models.Office{}).Where("id = ?", body.OfficeID).Count(&count).Error; err != nil || count == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Unknown officeId",
+		})
+		return false
+	}
+
+	if err := initializers.DB.Model(&models.Investor{}).Where("id = ? AND user_id = ?", body.InvestorID, userID).Count(&count).Error; err != nil || count == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Unknown investorId",
+		})
+		return false
+	}
+
+	return true
+}
+
 func CreateLocation(c *gin.Context) {
 	user, _ := c.Get("user")
 	var body models.Location
 
-	if c.BindJSON(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request body",
-		})
+	if !bindJSON(c, &body) {
+		return
+	}
+
+	if !validateLocationRefs(c, body, user.(models.User).ID) {
 		return
 	}
 
@@ -67,10 +95,11 @@ func UpdateLocation(c *gin.Context) {
 	user, _ := c.Get("user")
 	var body models.Location
 
-	if c.BindJSON(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request body",
-		})
+	if !bindJSON(c, &body) {
+		return
+	}
+
+	if !validateLocationRefs(c, body, user.(models.User).ID) {
 		return
 	}
 
@@ -94,6 +123,7 @@ func UpdateLocation(c *gin.Context) {
 	location.PlantingDone = body.PlantingDone
 	location.UserID = user.(models.User).ID
 	location.StatusID = body.StatusID
+	location.OfficeID = body.OfficeID
 	location.InvestorID = body.InvestorID
 
 	location.Application.Signature = body.Application.Signature
@@ -185,9 +215,7 @@ func DeleteLocation(c *gin.Context) {
 		return
 	}
 
-	initializers.DB.Delete(&location)
-
-	if initializers.DB.Error != nil {
+	if err := initializers.DB.Delete(&location).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to delete location",
 		})
@@ -199,15 +227,30 @@ func DeleteLocation(c *gin.Context) {
 	})
 }
 
+func findOwnedNote(c *gin.Context, userID uint) (models.Note, bool) {
+	var note models.Note
+
+	result := initializers.DB.
+		Joins("JOIN locations ON locations.id = notes.location_id").
+		Where("locations.user_id = ?", userID).
+		First(&note, "notes.id = ?", c.Param("id"))
+
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Note not found",
+		})
+		return note, false
+	}
+
+	return note, true
+}
+
 func AddNote(c *gin.Context) {
 	user, _ := c.Get("user")
 	var body models.Note
 	var location models.Location
 
-	if c.BindJSON(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request body",
-		})
+	if !bindJSON(c, &body) {
 		return
 	}
 
@@ -221,6 +264,7 @@ func AddNote(c *gin.Context) {
 	}
 
 	note := models.Note{
+		UserID:     user.(models.User).ID,
 		LocationID: location.ID,
 		Content:    body.Content,
 	}
@@ -236,47 +280,41 @@ func AddNote(c *gin.Context) {
 }
 
 func UpdateNote(c *gin.Context) {
+	user, _ := c.Get("user")
 	var body models.Note
 
-	if c.BindJSON(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request body",
-		})
+	if !bindJSON(c, &body) {
 		return
 	}
 
-	result := initializers.DB.Where("id", c.Param("id")).Updates(&body)
+	note, ok := findOwnedNote(c, user.(models.User).ID)
+	if !ok {
+		return
+	}
 
-	if result.RowsAffected == 0 {
+	note.Content = body.Content
+
+	if err := initializers.DB.Save(&note).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to update note",
 		})
 		return
 	}
 
-	var updatedNote models.Note
-	initializers.DB.First(&updatedNote, c.Param("id"))
-
-	c.JSON(http.StatusOK, updatedNote)
+	c.JSON(http.StatusOK, note)
 }
 
 func DeleteNote(c *gin.Context) {
-	var note models.Note
+	user, _ := c.Get("user")
 
-	result := initializers.DB.Where("id", c.Param("id")).First(&note)
-
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Note not found",
-		})
+	note, ok := findOwnedNote(c, user.(models.User).ID)
+	if !ok {
 		return
 	}
 
-	deleteResult := initializers.DB.Delete(&note)
-
-	if deleteResult.Error != nil {
+	if err := initializers.DB.Delete(&note).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to delete note: " + deleteResult.Error.Error(),
+			"error": "Failed to delete note",
 		})
 		return
 	}

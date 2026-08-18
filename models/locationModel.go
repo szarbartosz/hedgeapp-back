@@ -7,11 +7,11 @@ import (
 type Location struct {
 	ID          uint        `gorm:"primaryKey" json:"id"`
 	UserID      uint        `json:"userId"`
-	StatusID    uint        `json:"statusId"`
+	StatusID    uint        `json:"statusId" binding:"required"`
 	Status      Status      `gorm:"foreignKey:StatusID" json:"status"`
-	OfficeID    uint        `json:"officeId"`
+	OfficeID    uint        `json:"officeId" binding:"required"`
 	Office      Office      `gorm:"foreignKey:OfficeID" json:"office"`
-	InvestorID  uint        `json:"investorId"`
+	InvestorID  uint        `json:"investorId" binding:"required"`
 	Investor    Investor    `gorm:"foreignKey:InvestorID" json:"investor"`
 	AddressID   uint        `json:"addressId"`
 	Address     Address     `gorm:"foreignKey:AddressID" json:"address"`

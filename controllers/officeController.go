@@ -12,10 +12,7 @@ func CreateOffice(c *gin.Context) {
 	user, _ := c.Get("user")
 	var body models.Office
 
-	if c.BindJSON(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request body",
-		})
+	if !bindJSON(c, &body) {
 		return
 	}
 
@@ -43,10 +40,7 @@ func CreateOffice(c *gin.Context) {
 func UpdateOffice(c *gin.Context) {
 	var body models.Office
 
-	if c.BindJSON(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request body",
-		})
+	if !bindJSON(c, &body) {
 		return
 	}
 

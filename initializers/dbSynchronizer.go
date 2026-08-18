@@ -1,14 +1,25 @@
 package initializers
 
-import "main/models"
+import (
+	"fmt"
+	"main/models"
+)
 
 func SyncDB() {
-	DB.AutoMigrate(&models.User{})
-	DB.AutoMigrate(&models.Note{})
-	DB.AutoMigrate(&models.Office{})
-	DB.AutoMigrate(&models.Status{})
-	DB.AutoMigrate(&models.Address{})
-	DB.AutoMigrate(&models.Application{})
-	DB.AutoMigrate(&models.Investor{})
-	DB.AutoMigrate(&models.Location{})
+	tables := []any{
+		&models.User{},
+		&models.Status{},
+		&models.Address{},
+		&models.Office{},
+		&models.Investor{},
+		&models.Location{},
+		&models.Application{},
+		&models.Note{},
+	}
+
+	for _, model := range tables {
+		if err := DB.AutoMigrate(model); err != nil {
+			panic(fmt.Sprintf("Failed to migrate %T: %s", model, err))
+		}
+	}
 }

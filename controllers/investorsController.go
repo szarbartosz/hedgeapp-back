@@ -12,10 +12,7 @@ func CreateInvestor(c *gin.Context) {
 	user, _ := c.Get("user")
 	var body models.Investor
 
-	if c.BindJSON(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request body",
-		})
+	if !bindJSON(c, &body) {
 		return
 	}
 
@@ -50,10 +47,7 @@ func UpdateInvestor(c *gin.Context) {
 	user, _ := c.Get("user")
 	var body models.Investor
 
-	if c.BindJSON(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request body",
-		})
+	if !bindJSON(c, &body) {
 		return
 	}
 

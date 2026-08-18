@@ -16,10 +16,7 @@ import (
 func Register(c *gin.Context) {
 	var body models.SignUpCredentials
 
-	if c.BindJSON(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request body",
-		})
+	if !bindJSON(c, &body) {
 		return
 	}
 
@@ -57,10 +54,7 @@ func Register(c *gin.Context) {
 func Login(c *gin.Context) {
 	var body models.Credentials
 
-	if c.BindJSON(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request body",
-		})
+	if !bindJSON(c, &body) {
 		return
 	}
 

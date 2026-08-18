@@ -312,6 +312,7 @@ POST /locations
     zipCode: string
   },
   statusId: int,
+  officeId: int,
   investorId: int,
 }
 ```
@@ -338,6 +339,7 @@ PUT /locations/:id
     zipCode: string
   },
   statusId: int,
+  officeId: int,
   investorId: int,
 }
 ```

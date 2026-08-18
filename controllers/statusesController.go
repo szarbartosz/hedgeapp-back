@@ -11,10 +11,7 @@ import (
 func CreateStatus(c *gin.Context) {
 	var body models.Status
 
-	if c.BindJSON(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request body",
-		})
+	if !bindJSON(c, &body) {
 		return
 	}
 
@@ -34,26 +31,28 @@ func CreateStatus(c *gin.Context) {
 func UpdateStatus(c *gin.Context) {
 	var body models.Status
 
-	if c.BindJSON(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request body",
+	if !bindJSON(c, &body) {
+		return
+	}
+
+	var status models.Status
+	if err := initializers.DB.First(&status, c.Param("id")).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Status not found",
 		})
 		return
 	}
 
-	result := initializers.DB.Where("id", c.Param("id")).Updates(&body)
+	status.Name = body.Name
 
-	if result.RowsAffected == 0 {
+	if err := initializers.DB.Save(&status).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to update status",
 		})
 		return
 	}
 
-	var updatedStatus models.Status
-	initializers.DB.First(&updatedStatus, c.Param("id"))
-
-	c.JSON(http.StatusOK, updatedStatus)
+	c.JSON(http.StatusOK, status)
 }
 
 func GetStatuses(c *gin.Context) {
